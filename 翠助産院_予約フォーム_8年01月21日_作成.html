@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>予約フォーム｜翠助産院</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* 基本スタイルは既存のものを維持しつつ、助産院用に調整 */
+        body { font-family: 'Poppins', sans-serif; background-color: #ffffff; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding-top: 5px; }
+        .container { background-color: #fdfdfd; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); width: 90%; max-width: 500px; padding: 25px; box-sizing: border-box; margin: 0 auto; padding-bottom: 50px; }
+        h1 { background: linear-gradient(135deg, #13ca5e, #0e9e49); color: white; padding: 20px; margin: -25px -25px 20px -25px; text-align: center; font-size: 24px; border-radius: 12px 12px 0 0; }
+        
+        .label { background-color: #13ca5e; color: #ffffff; padding: 5px; font-size: 16px; text-align: center; margin-bottom: 15px; border-radius: 4px; }
+        .required { color: #ffeb3b; font-size: 0.7em; margin-left: 5px; vertical-align: middle; border: 1px solid #fff; padding: 1px 4px; border-radius: 3px; }
+        
+        input[type="text"], input[type="tel"], input[type="date"], select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        
+        /* カテゴリ切り替えタブ */
+        .category-tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+        .category-tab { flex: 1; padding: 12px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 5px 5px 0 0; cursor: pointer; text-align: center; font-weight: bold; color: #555; transition: 0.3s; }
+        .category-tab.active { background: #13ca5e; color: white; border-color: #13ca5e; }
+        
+        /* メニューボタン */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .menu-btn { padding: 12px; background: #fff; border: 1px solid #13ca5e; color: #13ca5e; border-radius: 5px; cursor: pointer; text-align: center; transition: 0.2s; }
+        .menu-btn:hover { background: #e8f5e9; }
+        .menu-btn.active { background: #13ca5e; color: white; box-shadow: 0 0 0 2px #0e9e49; }
+
+        /* カレンダー */
+        .calendar-container { margin-top: 20px; }
+        .calendar table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .calendar th, .calendar td { text-align: center; padding: 8px 2px; border: 1px solid #ddd; font-size: 12px; cursor: pointer; }
+        .calendar th { background: #f7f7f7; }
+        .calendar td.available { color: #13ca5e; font-weight: bold; }
+        .calendar td.unavailable { background-color: #eee; color: #ccc; pointer-events: none; }
+        .calendar td.selected { background-color: #13ca5e; color: white; }
+        
+        .submit-button { width: 100%; padding: 15px; background-color: #13ca5e; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; }
+        .submit-button:hover { background-color: #0e9e49; }
+
+        /* ローディング */
+        .loading-spinner { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 20px; border-radius: 10px; z-index: 999; }
+        
+        .section-hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>翠助産院 予約フォーム</h1>
+
+        <div class="label">お客様情報 <span class="required">必須</span></div>
+        <input type="text" id="name" placeholder="お名前">
+        <input type="tel" id="phone" placeholder="電話番号">
+        
+        <div class="label">詳細情報 <span class="required">必須</span></div>
+        <input type="text" id="dueDate" placeholder="出産予定日（妊婦の方のみ）" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input type="text" id="childName" placeholder="お子様の名前">
+        <input type="text" id="childDob" placeholder="お子様の生年月日" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input type="text" id="address" placeholder="お住まいの市町">
+        
+        <select id="childCount">
+            <option value="" disabled selected>何人目のお子様ですか？</option>
+            <script>
+                for(let i=1; i<=10; i++) document.write(`<option value="${i}人目">${i}人目</option>`);
+            </script>
+        </select>
+
+        <div class="label" id="menuLabel">メニュー選択 <span class="required">必須</span></div>
+        <div class="category-tabs">
+            <div class="category-tab active" onclick="switchCategory('care')">個別・産後ケア</div>
+            <div class="category-tab" onclick="switchCategory('class')">クラス・イベント</div>
+        </div>
+
+        <div id="care-section" class="menu-section">
+            <div class="menu-grid">
+                <button type="button" class="menu-btn" onclick="selectMenu(this, 'ママケア', 60)">ママケア</button>
+                <button type="button" class="menu-btn" onclick="selectMenu(this, 'ベビーケア', 60)">ベビーケア</button>
+                <button type="button" class="menu-btn" onclick="selectMenu(this, 'リラックスケア', 90)">リラックスケア</button>
+                <button type="button" class="menu-btn" onclick="selectMenu(this, '乳房ケア', 60)">乳房ケア</button>
+            </div>
+            <p style="font-size:12px; color:#666;">※個別ケアは平日のみご予約可能です。</p>
+        </div>
+
+        <div id="class-section" class="menu-section section-hidden">
+            <div class="menu-grid">
+                <button type="button" class="menu-btn" onclick="selectMenu(this, 'クラス', 60)">クラス</button>
+                <button type="button" class="menu-btn" onclick="selectMenu(this, 'イベント', 120)">イベント</button>
+            </div>
+            <p style="font-size:12px; color:#666;">※開催日が決まっているメニューです。</p>
+        </div>
+
+        <div class="label">希望日時 <span class="required">必須</span></div>
+        
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <button onclick="changeWeek(-1)">Start ⇦ 前週</button>
+            <span id="currentMonthLabel" style="font-weight:bold; padding-top:5px;">--月</span>
+            <button onclick="changeWeek(1)">翌週 ⇨ Next</button>
+        </div>
+
+        <div id="calendar" class="calendar">
+            <table>
+                <thead>
+                    <tr id="calendar-header">
+                        <th>時間</th>
+                        </tr>
+                </thead>
+                <tbody id="calendar-body">
+                    </tbody>
+            </table>
+        </div>
+
+        <br>
+        <div class="label">メッセージ</div>
+        <textarea id="message" rows="3" placeholder="ご質問等あればご記入ください"></textarea>
+
+        <button class="submit-button" onclick="submitForm()">予約を行う</button>
+
+        <div id="loading" class="loading-spinner">読み込み中...</div>
+    </div>
+
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script>
+        // 設定
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbz0J_TTMIvEmsk5Ae6B4qldtJBZ5UWq_nvbgem4ykJYK959YEmKi-2zh71sDdCV0bkBYw/exec'; // ★あなたのデプロイURLに書き換えてください
+
+        let currentCategory = 'care'; // 'care' or 'class'
+        let selectedMenuName = '';
+        let selectedDuration = 0;
+        let selectedDate = '';
+        let currentDate = new Date(); // カレンダー表示用
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            liff.init({ liffId: '2005254357-zKma9BZk' }) // ★あなたのLIFF ID
+                .then(() => console.log('LIFF OK'))
+                .catch(err => console.error(err));
+            
+            renderCalendarHeader();
+            fetchAvailability();
+        });
+
+        // カテゴリ切り替え
+        function switchCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.menu-section').forEach(el => el.classList.add('section-hidden'));
+            
+            // タブの見た目
+            if(cat === 'care') {
+                document.querySelectorAll('.category-tab')[0].classList.add('active');
+                document.getElementById('care-section').classList.remove('section-hidden');
+            } else {
+                document.querySelectorAll('.category-tab')[1].classList.add('active');
+                document.getElementById('class-section').classList.remove('section-hidden');
+            }
+
+            // 選択リセット
+            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+            selectedMenuName = '';
+            selectedDate = '';
+            fetchAvailability(); // カテゴリによって空き状況が変わるため再取得
+        }
+
+        // メニュー選択
+        function selectMenu(btn, name, duration) {
+            document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedMenuName = name;
+            selectedDuration = duration;
+            selectedDate = ''; // 日時リセット
+            
+            // UIへのフィードバック（任意）
+            // カテゴリがclassの場合、GAS側で特定日フィルタがかかる想定
+            fetchAvailability();
+        }
+
+        // 週移動
+        function changeWeek(offset) {
+            currentDate.setDate(currentDate.getDate() + (offset * 7));
+            renderCalendarHeader();
+            fetchAvailability();
+        }
+
+        // ヘッダー描画
+        function renderCalendarHeader() {
+            const headerRow = document.getElementById('calendar-header');
+            // 時間列以外を削除
+            while(headerRow.children.length > 1) { headerRow.removeChild(headerRow.lastChild); }
+            
+            const startDay = new Date(currentDate);
+            document.getElementById('currentMonthLabel').innerText = `${startDay.getFullYear()}年${startDay.getMonth()+1}月`;
+
+            const days = ['日','月','火','水','木','金','土'];
+            
+            for(let i=0; i<7; i++) {
+                const d = new Date(startDay);
+                d.setDate(d.getDate() + i);
+                const th = document.createElement('th');
+                th.innerHTML = `${d.getDate()}<br>(${days[d.getDay()]})`;
+                if(d.getDay() === 0) th.style.color = 'red'; // 日
+                if(d.getDay() === 6) th.style.color = 'blue'; // 土
+                headerRow.appendChild(th);
+            }
+        }
+
+        // 空き状況取得
+        async function fetchAvailability() {
+            document.getElementById('loading').style.display = 'block';
+            
+            const startTime = new Date(currentDate);
+            startTime.setHours(0,0,0,0);
+            const endTime = new Date(startTime);
+            endTime.setDate(endTime.getDate() + 7);
+
+            // カテゴリ情報も送る（重要）
+            const url = `${GAS_URL}?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}&category=${currentCategory}`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json(); // { "2026-01-21T10:00": "OK", ... } 形式を想定
+                renderCalendarBody(data);
+            } catch(e) {
+                console.error(e);
+                alert('読み込みエラー');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+// カレンダー描画関数（所要時間分の空き枠チェック対応版）
+        function renderCalendarBody(availabilityMap) {
+            const tbody = document.getElementById('calendar-body');
+            tbody.innerHTML = '';
+            
+            // 表示する時間枠
+            const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', 
+                           '12:00', '12:30', '13:00', '13:30', 
+                           '14:00', '14:30', '15:00', '15:30', 
+                           '16:00', '16:30', '17:00'];
+
+            const now = new Date(); // 現在時刻
+
+            times.forEach(timeStr => {
+                const tr = document.createElement('tr');
+                const tdTime = document.createElement('td');
+                tdTime.innerText = timeStr;
+                tr.appendChild(tdTime);
+
+                for(let i=0; i<7; i++) {
+                    const cellDate = new Date(currentDate);
+                    cellDate.setDate(cellDate.getDate() + i);
+                    const td = document.createElement('td');
+                    
+                    // 1. このセルの開始時間
+                    const slotStart = new Date(cellDate);
+                    const [h, m] = timeStr.split(':').map(Number);
+                    slotStart.setHours(h, m, 0, 0);
+
+                    // 2. メニュー所要時間から必要な枠数を計算
+                    const menuDuration = selectedDuration || 60; // 未選択ならデフォルト60分
+                    const requiredSlots = Math.ceil(menuDuration / 30); // 60分なら2枠、90分なら3枠
+
+                    let isAvailable = true;
+
+                    // --- 【修正ポイント】所要時間分のすべての枠をチェック ---
+                    for (let k = 0; k < requiredSlots; k++) {
+                        // チェック対象の時間 (開始時間 + 30分 * k)
+                        const checkTime = new Date(slotStart);
+                        checkTime.setMinutes(slotStart.getMinutes() + (k * 30));
+
+                        // GASのキー形式に合わせる ("YYYY-MM-DD HH:mm")
+                        const y = checkTime.getFullYear();
+                        const month = ('0' + (checkTime.getMonth() + 1)).slice(-2);
+                        const d = ('0' + checkTime.getDate()).slice(-2);
+                        const hh = ('0' + checkTime.getHours()).slice(-2);
+                        const mm = ('0' + checkTime.getMinutes()).slice(-2);
+                        const key = `${y}-${month}-${d} ${hh}:${mm}`;
+
+                        // その枠がGASから「OK」と返ってきていなければNG
+                        // ※12:00が×なら、11:30開始の60分コースはここでNGになります
+                        if (availabilityMap[key] !== 'OK') {
+                            isAvailable = false;
+                            break; 
+                        }
+                    }
+
+                    // 3. その他の条件チェック（終了時間、過去、土日など）
+                    const slotEnd = new Date(slotStart);
+                    slotEnd.setMinutes(slotStart.getMinutes() + menuDuration);
+
+                    // 終了時間が翌日になる場合は✕
+                    if (slotEnd.getDate() !== slotStart.getDate()) isAvailable = false;
+
+                    // 18時以降に終了する予約を不可にする (18:00ちょうど終了はOK)
+                    if (slotEnd.getHours() >= 17 && slotEnd.getMinutes() > 0) isAvailable = false;
+                    if (slotEnd.getHours() > 17) isAvailable = false;
+
+                    // 過去の時間チェック
+                    if (slotStart < now) isAvailable = false;
+
+                    // 土日チェック
+                    const dayOfWeek = slotStart.getDay();
+                    if (dayOfWeek === 0 || dayOfWeek === 6) isAvailable = false;
+
+                    // 4. 描画
+                    if (isAvailable) {
+                        td.innerText = '◯';
+                        td.classList.add('available');
+                        
+                        // クリック用キー生成
+                        const y = slotStart.getFullYear();
+                        const month = ('0'+(slotStart.getMonth()+1)).slice(-2);
+                        const d = ('0'+slotStart.getDate()).slice(-2);
+                        const hh = ('0'+slotStart.getHours()).slice(-2);
+                        const mm = ('0'+slotStart.getMinutes()).slice(-2);
+                        const startKey = `${y}-${month}-${d} ${hh}:${mm}`;
+
+                        td.onclick = () => selectDateCell(td, startKey);
+                    } else {
+                        td.innerText = '✕'; 
+                        td.classList.add('unavailable');
+                    }
+                    
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            });
+        }
+
+        function selectDateCell(td, dateStr) {
+            document.querySelectorAll('.calendar td').forEach(c => c.classList.remove('selected'));
+            td.classList.add('selected');
+            selectedDate = dateStr;
+        }
+
+        // 送信処理
+        function submitForm() {
+            // バリデーション
+            if(!document.getElementById('name').value) return alert('お名前を入力してください');
+            if(!document.getElementById('phone').value) return alert('電話番号を入力してください');
+            if(!selectedMenuName) return alert('メニューを選択してください');
+            if(!selectedDate) return alert('日時を選択してください');
+
+            const msg = `【予約フォーム】
+お名前：${document.getElementById('name').value}
+電話番号：${document.getElementById('phone').value}
+出産予定日：${document.getElementById('dueDate').value}
+お子様の名前：${document.getElementById('childName').value}
+お子様の生年月日：${document.getElementById('childDob').value}
+お住い：${document.getElementById('address').value}
+何人目：${document.getElementById('childCount').value}
+カテゴリー：${currentCategory === 'care' ? '個別・産後ケア' : 'クラス・イベント'}
+メニュー：${selectedMenuName}
+希望日時：
+ ${selectedDate.replace(/-/g,'年').replace(' ','日 ')}
+メッセージ：${document.getElementById('message').value}`;
+
+            if(liff.isInClient()) {
+                liff.sendMessages([{ type: 'text', text: msg }])
+                    .then(() => {
+                        alert('予約リクエストを送信しました！');
+                        liff.closeWindow();
+                    })
+                    .catch(e => {
+                        alert('送信失敗: ' + e);
+                    });
+            } else {
+                alert('LINEアプリ内から開いてください。\n\n送信内容確認:\n' + msg);
+            }
+        }
+    </script>
+</body>
+</html>

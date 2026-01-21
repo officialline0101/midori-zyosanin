@@ -50,16 +50,16 @@
         <h1>翠助産院 予約フォーム</h1>
 
         <div class="label">お客様情報 <span class="required">必須</span></div>
-        <input type="text" id="name" placeholder="お名前">
-        <input type="tel" id="phone" placeholder="電話番号">
+        <input type="text" id="name" placeholder="お名前" oninput="saveInput(this.id)">
+        <input type="tel" id="phone" placeholder="電話番号" oninput="saveInput(this.id)">
         
         <div class="label">詳細情報 <span class="required">必須</span></div>
-        <input type="text" id="dueDate" placeholder="出産予定日（妊婦の方のみ）" onfocus="(this.type='date')" onblur="(this.type='text')">
-        <input type="text" id="childName" placeholder="お子様の名前">
-        <input type="text" id="childDob" placeholder="お子様の生年月日" onfocus="(this.type='date')" onblur="(this.type='text')">
-        <input type="text" id="address" placeholder="お住まいの市町">
+        <input type="text" id="dueDate" placeholder="出産予定日（妊婦の方のみ）" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="saveInput(this.id)">
+        <input type="text" id="childName" placeholder="お子様の名前" oninput="saveInput(this.id)">
+        <input type="text" id="childDob" placeholder="お子様の生年月日" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="saveInput(this.id)">
+        <input type="text" id="address" placeholder="お住まいの市町" oninput="saveInput(this.id)">
         
-        <select id="childCount">
+        <select id="childCount" onchange="saveInput(this.id)">
             <option value="" disabled selected>何人目のお子様ですか？</option>
             <script>
                 for(let i=1; i<=10; i++) document.write(`<option value="${i}人目">${i}人目</option>`);
@@ -122,7 +122,7 @@
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script>
         // 設定
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwj6Ygkys2anETshWl_8r8RPtWWBnHNDkoAF8nBykkyVKNWuaInMiQ71DgD2azf0_Xa9Q/exec'; // ★あなたのデプロイURLに書き換えてください
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwj6Ygkys2anETshWl_8r8RPtWWBnHNDkoAF8nBykkyVKNWuaInMiQ71DgD2azf0_Xa9Q/exec'; 
 
         let currentCategory = 'care'; // 'care' or 'class'
         let selectedMenuName = '';
@@ -130,12 +130,33 @@
         let selectedDate = '';
         let currentDate = new Date(); // カレンダー表示用
 
+        // ▼▼▼ 保存機能の追加 ▼▼▼
+        // 入力内容をローカルストレージに保存
+        function saveInput(id) {
+            const value = document.getElementById(id).value;
+            localStorage.setItem(id, value);
+        }
+        // ▲▲▲ 保存機能の追加 ▲▲▲
+
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
-            liff.init({ liffId: '2008938180-95ejK57Y' }) // ★あなたのLIFF ID
+            liff.init({ liffId: '2008938180-95ejK57Y' }) 
                 .then(() => console.log('LIFF OK'))
                 .catch(err => console.error(err));
             
+            // ▼▼▼ 保存データの復元処理 ▼▼▼
+            const idsToRestore = ['name', 'phone', 'dueDate', 'childName', 'childDob', 'address', 'childCount'];
+            idsToRestore.forEach(id => {
+                const savedValue = localStorage.getItem(id);
+                if (savedValue) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.value = savedValue;
+                    }
+                }
+            });
+            // ▲▲▲ 保存データの復元処理 ▲▲▲
+
             renderCalendarHeader();
             fetchAvailability();
         });
@@ -228,7 +249,7 @@
             }
         }
 
-// カレンダー描画関数（所要時間分の空き枠チェック対応版）
+        // カレンダー描画関数（所要時間分の空き枠チェック対応版）
         function renderCalendarBody(availabilityMap) {
             const tbody = document.getElementById('calendar-body');
             tbody.innerHTML = '';
@@ -372,4 +393,3 @@
     </script>
 </body>
 </html>
-

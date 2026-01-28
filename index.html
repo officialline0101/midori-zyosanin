@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,44 +8,204 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         /* 基本スタイルは既存のものを維持しつつ、助産院用に調整 */
-        body { font-family: 'Poppins', sans-serif; background-color: #ffffff; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding-top: 5px; }
-        .container { background-color: #fdfdfd; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); width: 90%; max-width: 500px; padding: 25px; box-sizing: border-box; margin: 0 auto; padding-bottom: 50px; }
-        h1 { background: linear-gradient(135deg, #13ca5e, #0e9e49); color: white; padding: 20px; margin: -25px -25px 20px -25px; text-align: center; font-size: 24px; border-radius: 12px 12px 0 0; }
-        
-        .label { background-color: #13ca5e; color: #ffffff; padding: 5px; font-size: 16px; text-align: center; margin-bottom: 15px; border-radius: 4px; }
-        .required { color: #ffeb3b; font-size: 0.7em; margin-left: 5px; vertical-align: middle; border: 1px solid #fff; padding: 1px 4px; border-radius: 3px; }
-        
-        input[type="text"], input[type="tel"], input[type="date"], select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
-        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 5px;
+        }
+
+        .container {
+            background-color: #fdfdfd;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+            padding: 25px;
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #13ca5e, #0e9e49);
+            color: white;
+            padding: 20px;
+            margin: -25px -25px 20px -25px;
+            text-align: center;
+            font-size: 24px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .label {
+            background-color: #13ca5e;
+            color: #ffffff;
+            padding: 5px;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .required {
+            color: #ffeb3b;
+            font-size: 0.7em;
+            margin-left: 5px;
+            vertical-align: middle;
+            border: 1px solid #fff;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
         /* カテゴリ切り替えタブ */
-        .category-tabs { display: flex; gap: 5px; margin-bottom: 15px; }
-        .category-tab { flex: 1; padding: 12px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 5px 5px 0 0; cursor: pointer; text-align: center; font-weight: bold; color: #555; transition: 0.3s; }
-        .category-tab.active { background: #13ca5e; color: white; border-color: #13ca5e; }
-        
+        .category-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .category-tab {
+            flex: 1;
+            padding: 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            color: #555;
+            transition: 0.3s;
+        }
+
+        .category-tab.active {
+            background: #13ca5e;
+            color: white;
+            border-color: #13ca5e;
+        }
+
         /* メニューボタン */
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .menu-btn { padding: 12px; background: #fff; border: 1px solid #13ca5e; color: #13ca5e; border-radius: 5px; cursor: pointer; text-align: center; transition: 0.2s; }
-        .menu-btn:hover { background: #e8f5e9; }
-        .menu-btn.active { background: #13ca5e; color: white; box-shadow: 0 0 0 2px #0e9e49; }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .menu-btn {
+            padding: 12px;
+            background: #fff;
+            border: 1px solid #13ca5e;
+            color: #13ca5e;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .menu-btn:hover {
+            background: #e8f5e9;
+        }
+
+        .menu-btn.active {
+            background: #13ca5e;
+            color: white;
+            box-shadow: 0 0 0 2px #0e9e49;
+        }
 
         /* カレンダー */
-        .calendar-container { margin-top: 20px; }
-        .calendar table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .calendar th, .calendar td { text-align: center; padding: 8px 2px; border: 1px solid #ddd; font-size: 12px; cursor: pointer; }
-        .calendar th { background: #f7f7f7; }
-        .calendar td.available { color: #13ca5e; font-weight: bold; }
-        .calendar td.unavailable { background-color: #eee; color: #ccc; pointer-events: none; }
-        .calendar td.selected { background-color: #13ca5e; color: white; }
-        
-        .submit-button { width: 100%; padding: 15px; background-color: #13ca5e; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; }
-        .submit-button:hover { background-color: #0e9e49; }
+        .calendar-container {
+            margin-top: 20px;
+        }
+
+        .calendar table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .calendar th,
+        .calendar td {
+            text-align: center;
+            padding: 8px 2px;
+            border: 1px solid #ddd;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .calendar th {
+            background: #f7f7f7;
+        }
+
+        .calendar td.available {
+            color: #13ca5e;
+            font-weight: bold;
+        }
+
+        .calendar td.unavailable {
+            background-color: #eee;
+            color: #ccc;
+            pointer-events: none;
+        }
+
+        .calendar td.selected {
+            background-color: #13ca5e;
+            color: white;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #13ca5e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            background-color: #0e9e49;
+        }
 
         /* ローディング */
-        .loading-spinner { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 20px; border-radius: 10px; z-index: 999; }
-        
-        .section-hidden { display: none; }
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 999;
+        }
+
+        .section-hidden {
+            display: none;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>翠助産院 予約フォーム</h1>
@@ -52,19 +213,22 @@
         <div class="label">お客様情報 <span class="required">必須</span></div>
         <input type="text" id="name" placeholder="お名前" oninput="saveInput(this.id)">
         <input type="tel" id="phone" placeholder="電話番号" oninput="saveInput(this.id)">
-        
+
         <div class="label">詳細情報 <span class="required">必須</span></div>
-        <input type="text" id="dueDate" placeholder="出産予定日（妊婦の方のみ）" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="saveInput(this.id)">
+        <input type="text" id="dueDate" placeholder="出産予定日（妊婦の方のみ）" onfocus="(this.type='date')"
+            onblur="(this.type='text')" onchange="saveInput(this.id)">
         <input type="text" id="childName" placeholder="お子様の名前" oninput="saveInput(this.id)">
-        <input type="text" id="childDob" placeholder="お子様の生年月日" onfocus="(this.type='date')" onblur="(this.type='text')" onchange="saveInput(this.id)">
+        <input type="text" id="childDob" placeholder="お子様の生年月日" onfocus="(this.type='date')" onblur="(this.type='text')"
+            onchange="saveInput(this.id)">
         <input type="text" id="address" placeholder="お住まいの市町" oninput="saveInput(this.id)">
-        
+
         <select id="childCount" onchange="saveInput(this.id)">
             <option value="" disabled selected>何人目のお子様ですか？</option>
             <script>
-                for(let i=1; i<=10; i++) document.write(`<option value="${i}人目">${i}人目</option>`);
+                for (let i = 1; i <= 10; i++) document.write(`<option value="${i}人目">${i}人目</option>`);
             </script>
         </select>
+        <input type="text" id="fatherName" placeholder="パパのお名前（パパ参加の方のみ）" oninput="saveInput(this.id)">
 
         <div class="label" id="menuLabel">メニュー選択 <span class="required">必須</span></div>
         <div class="category-tabs">
@@ -91,7 +255,7 @@
         </div>
 
         <div class="label">希望日時 <span class="required">必須</span></div>
-        
+
         <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
             <button onclick="changeWeek(-1)">Start ⇦ 前週</button>
             <span id="currentMonthLabel" style="font-weight:bold; padding-top:5px;">--月</span>
@@ -103,10 +267,10 @@
                 <thead>
                     <tr id="calendar-header">
                         <th>時間</th>
-                        </tr>
+                    </tr>
                 </thead>
                 <tbody id="calendar-body">
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
@@ -122,7 +286,7 @@
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script>
         // 設定
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwj6Ygkys2anETshWl_8r8RPtWWBnHNDkoAF8nBykkyVKNWuaInMiQ71DgD2azf0_Xa9Q/exec'; 
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbwj6Ygkys2anETshWl_8r8RPtWWBnHNDkoAF8nBykkyVKNWuaInMiQ71DgD2azf0_Xa9Q/exec';
 
         let currentCategory = 'care'; // 'care' or 'class'
         let selectedMenuName = '';
@@ -140,12 +304,12 @@
 
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
-            liff.init({ liffId: '2008938180-95ejK57Y' }) 
+            liff.init({ liffId: '2008938180-95ejK57Y' })
                 .then(() => console.log('LIFF OK'))
                 .catch(err => console.error(err));
-            
+
             // ▼▼▼ 保存データの復元処理 ▼▼▼
-            const idsToRestore = ['name', 'phone', 'dueDate', 'childName', 'childDob', 'address', 'childCount'];
+            const idsToRestore = ['name', 'phone', 'dueDate', 'childName', 'childDob', 'address', 'childCount', 'fatherName'];
             idsToRestore.forEach(id => {
                 const savedValue = localStorage.getItem(id);
                 if (savedValue) {
@@ -166,9 +330,9 @@
             currentCategory = cat;
             document.querySelectorAll('.category-tab').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.menu-section').forEach(el => el.classList.add('section-hidden'));
-            
+
             // タブの見た目
-            if(cat === 'care') {
+            if (cat === 'care') {
                 document.querySelectorAll('.category-tab')[0].classList.add('active');
                 document.getElementById('care-section').classList.remove('section-hidden');
             } else {
@@ -190,7 +354,7 @@
             selectedMenuName = name;
             selectedDuration = duration;
             selectedDate = ''; // 日時リセット
-            
+
             // UIへのフィードバック（任意）
             // カテゴリがclassの場合、GAS側で特定日フィルタがかかる想定
             fetchAvailability();
@@ -207,20 +371,20 @@
         function renderCalendarHeader() {
             const headerRow = document.getElementById('calendar-header');
             // 時間列以外を削除
-            while(headerRow.children.length > 1) { headerRow.removeChild(headerRow.lastChild); }
-            
-            const startDay = new Date(currentDate);
-            document.getElementById('currentMonthLabel').innerText = `${startDay.getFullYear()}年${startDay.getMonth()+1}月`;
+            while (headerRow.children.length > 1) { headerRow.removeChild(headerRow.lastChild); }
 
-            const days = ['日','月','火','水','木','金','土'];
-            
-            for(let i=0; i<7; i++) {
+            const startDay = new Date(currentDate);
+            document.getElementById('currentMonthLabel').innerText = `${startDay.getFullYear()}年${startDay.getMonth() + 1}月`;
+
+            const days = ['日', '月', '火', '水', '木', '金', '土'];
+
+            for (let i = 0; i < 7; i++) {
                 const d = new Date(startDay);
                 d.setDate(d.getDate() + i);
                 const th = document.createElement('th');
                 th.innerHTML = `${d.getDate()}<br>(${days[d.getDay()]})`;
-                if(d.getDay() === 0) th.style.color = 'red'; // 日
-                if(d.getDay() === 6) th.style.color = 'blue'; // 土
+                if (d.getDay() === 0) th.style.color = 'red'; // 日
+                if (d.getDay() === 6) th.style.color = 'blue'; // 土
                 headerRow.appendChild(th);
             }
         }
@@ -228,9 +392,9 @@
         // 空き状況取得
         async function fetchAvailability() {
             document.getElementById('loading').style.display = 'block';
-            
+
             const startTime = new Date(currentDate);
-            startTime.setHours(0,0,0,0);
+            startTime.setHours(0, 0, 0, 0);
             const endTime = new Date(startTime);
             endTime.setDate(endTime.getDate() + 7);
 
@@ -241,7 +405,7 @@
                 const res = await fetch(url);
                 const data = await res.json(); // { "2026-01-21T10:00": "OK", ... } 形式を想定
                 renderCalendarBody(data);
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
                 alert('読み込みエラー');
             } finally {
@@ -253,12 +417,12 @@
         function renderCalendarBody(availabilityMap) {
             const tbody = document.getElementById('calendar-body');
             tbody.innerHTML = '';
-            
+
             // 表示する時間枠
-            const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', 
-                           '12:00', '12:30', '13:00', '13:30', 
-                           '14:00', '14:30', '15:00', '15:30', 
-                           '16:00', '16:30', '17:00'];
+            const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+                '12:00', '12:30', '13:00', '13:30',
+                '14:00', '14:30', '15:00', '15:30',
+                '16:00', '16:30', '17:00'];
 
             const now = new Date(); // 現在時刻
 
@@ -268,11 +432,11 @@
                 tdTime.innerText = timeStr;
                 tr.appendChild(tdTime);
 
-                for(let i=0; i<7; i++) {
+                for (let i = 0; i < 7; i++) {
                     const cellDate = new Date(currentDate);
                     cellDate.setDate(cellDate.getDate() + i);
                     const td = document.createElement('td');
-                    
+
                     // 1. このセルの開始時間
                     const slotStart = new Date(cellDate);
                     const [h, m] = timeStr.split(':').map(Number);
@@ -302,7 +466,7 @@
                         // ※12:00が×なら、11:30開始の60分コースはここでNGになります
                         if (availabilityMap[key] !== 'OK') {
                             isAvailable = false;
-                            break; 
+                            break;
                         }
                     }
 
@@ -328,21 +492,21 @@
                     if (isAvailable) {
                         td.innerText = '◯';
                         td.classList.add('available');
-                        
+
                         // クリック用キー生成
                         const y = slotStart.getFullYear();
-                        const month = ('0'+(slotStart.getMonth()+1)).slice(-2);
-                        const d = ('0'+slotStart.getDate()).slice(-2);
-                        const hh = ('0'+slotStart.getHours()).slice(-2);
-                        const mm = ('0'+slotStart.getMinutes()).slice(-2);
+                        const month = ('0' + (slotStart.getMonth() + 1)).slice(-2);
+                        const d = ('0' + slotStart.getDate()).slice(-2);
+                        const hh = ('0' + slotStart.getHours()).slice(-2);
+                        const mm = ('0' + slotStart.getMinutes()).slice(-2);
                         const startKey = `${y}-${month}-${d} ${hh}:${mm}`;
 
                         td.onclick = () => selectDateCell(td, startKey);
                     } else {
-                        td.innerText = '✕'; 
+                        td.innerText = '✕';
                         td.classList.add('unavailable');
                     }
-                    
+
                     tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
@@ -358,10 +522,10 @@
         // 送信処理
         function submitForm() {
             // バリデーション
-            if(!document.getElementById('name').value) return alert('お名前を入力してください');
-            if(!document.getElementById('phone').value) return alert('電話番号を入力してください');
-            if(!selectedMenuName) return alert('メニューを選択してください');
-            if(!selectedDate) return alert('日時を選択してください');
+            if (!document.getElementById('name').value) return alert('お名前を入力してください');
+            if (!document.getElementById('phone').value) return alert('電話番号を入力してください');
+            if (!selectedMenuName) return alert('メニューを選択してください');
+            if (!selectedDate) return alert('日時を選択してください');
 
             const msg = `【予約フォーム】
 お名前：${document.getElementById('name').value}
@@ -371,13 +535,14 @@
 お子様の生年月日：${document.getElementById('childDob').value}
 お住い：${document.getElementById('address').value}
 何人目：${document.getElementById('childCount').value}
+パパのお名前：${document.getElementById('fatherName').value}
 カテゴリー：${currentCategory === 'care' ? '個別・産後ケア' : 'クラス・イベント'}
 メニュー：${selectedMenuName}
 希望日時：
- ${selectedDate.replace(/-/g,'年').replace(' ','日 ')}
+ ${selectedDate.replace(/-/g, '年').replace(' ', '日 ')}
 メッセージ：${document.getElementById('message').value}`;
 
-            if(liff.isInClient()) {
+            if (liff.isInClient()) {
                 liff.sendMessages([{ type: 'text', text: msg }])
                     .then(() => {
                         alert('予約リクエストを送信しました！');
@@ -392,4 +557,5 @@
         }
     </script>
 </body>
+
 </html>

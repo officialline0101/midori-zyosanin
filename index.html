@@ -231,22 +231,9 @@
         <input type="text" id="fatherName" placeholder="パパのお名前（パパ参加の方のみ）" oninput="saveInput(this.id)">
 
         <div class="label" id="menuLabel">メニュー選択 <span class="required">必須</span></div>
-        <div class="category-tabs">
-            <div class="category-tab active" onclick="switchCategory('care')">個別・産後ケア</div>
-            <div class="category-tab" onclick="switchCategory('class')">クラス・イベント</div>
-        </div>
 
-        <div id="care-section" class="menu-section">
-            <div class="menu-grid">
-                <button type="button" class="menu-btn" onclick="selectMenu(this, 'ママケア', 60)">ママケア</button>
-                <button type="button" class="menu-btn" onclick="selectMenu(this, 'ベビーケア', 60)">ベビーケア</button>
-                <button type="button" class="menu-btn" onclick="selectMenu(this, 'リラックスケア', 90)">リラックスケア</button>
-                <button type="button" class="menu-btn" onclick="selectMenu(this, '乳房ケア', 60)">乳房ケア</button>
-            </div>
-            <p style="font-size:12px; color:#666;">※個別ケアは平日のみご予約可能です。</p>
-        </div>
 
-        <div id="class-section" class="menu-section section-hidden">
+        <div id="class-section" class="menu-section">
             <div class="menu-grid">
                 <button type="button" class="menu-btn" onclick="selectMenu(this, 'クラス', 60)">クラス</button>
                 <button type="button" class="menu-btn" onclick="selectMenu(this, 'イベント', 120)">イベント</button>
@@ -288,7 +275,7 @@
         // 設定
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbwj6Ygkys2anETshWl_8r8RPtWWBnHNDkoAF8nBykkyVKNWuaInMiQ71DgD2azf0_Xa9Q/exec';
 
-        let currentCategory = 'care'; // 'care' or 'class'
+        let currentCategory = 'class'; // 'class'のみ
         let selectedMenuName = '';
         let selectedDuration = 0;
         let selectedDate = '';
@@ -325,27 +312,7 @@
             fetchAvailability();
         });
 
-        // カテゴリ切り替え
-        function switchCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.category-tab').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.menu-section').forEach(el => el.classList.add('section-hidden'));
 
-            // タブの見た目
-            if (cat === 'care') {
-                document.querySelectorAll('.category-tab')[0].classList.add('active');
-                document.getElementById('care-section').classList.remove('section-hidden');
-            } else {
-                document.querySelectorAll('.category-tab')[1].classList.add('active');
-                document.getElementById('class-section').classList.remove('section-hidden');
-            }
-
-            // 選択リセット
-            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
-            selectedMenuName = '';
-            selectedDate = '';
-            fetchAvailability(); // カテゴリによって空き状況が変わるため再取得
-        }
 
         // メニュー選択
         function selectMenu(btn, name, duration) {
@@ -536,7 +503,7 @@
 お住い：${document.getElementById('address').value}
 何人目：${document.getElementById('childCount').value}
 パパのお名前：${document.getElementById('fatherName').value}
-カテゴリー：${currentCategory === 'care' ? '個別・産後ケア' : 'クラス・イベント'}
+カテゴリー：クラス・イベント
 メニュー：${selectedMenuName}
 希望日時：
  ${selectedDate.replace(/-/g, '年').replace(' ', '日 ')}
@@ -559,4 +526,3 @@
 </body>
 
 </html>
-

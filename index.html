@@ -192,6 +192,29 @@
             margin-bottom: 15px;
         }
 
+        .event-info-box {
+            background: #fffdf5;
+            border: 1px solid #eadfbd;
+            border-radius: 8px;
+            color: #4a3b16;
+            font-size: 13px;
+            line-height: 1.7;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .event-info-box strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #2f260e;
+            font-size: 14px;
+        }
+
+        .event-info-box ul {
+            margin: 6px 0 0 18px;
+            padding: 0;
+        }
+
         /* カレンダー */
         .calendar-container {
             margin-top: 20px;
@@ -330,50 +353,28 @@
 
 <body>
     <div class="container">
-        <h1>翠助産院 予約フォーム</h1>
+        <h1>クラス・イベント<br>予約フォーム</h1>
 
         <p style="font-size: 14px; color: #e60000; text-align: center; font-weight: bold; margin-top: -5px; margin-bottom: 15px;">
             ※ご友人と一緒にご予約をご希望の場合は、LINEより直接お問い合わせください
         </p>
 
-        <div class="label">お客様情報 <span class="required">必須</span></div>
-        <input type="text" id="name" placeholder="お名前" oninput="saveInput(this.id)">
-        <input type="tel" id="phone" placeholder="電話番号" oninput="saveInput(this.id)">
-
-        <div class="label">詳細情報 <span class="required">必須</span></div>
-        <input type="text" id="dueDate" placeholder="出産予定日（妊婦の方のみ）" onfocus="(this.type='date')"
-            onblur="(this.type='text')" onchange="saveInput(this.id)">
-        <input type="text" id="childName" placeholder="お子様の名前" oninput="saveInput(this.id)">
-        <input type="text" id="childDob" placeholder="お子様の生年月日" onfocus="(this.type='date')" onblur="(this.type='text')"
-            onchange="saveInput(this.id)">
-        <input type="text" id="address" placeholder="お住まいの市町" oninput="saveInput(this.id)">
-
-        <select id="childCount" onchange="saveInput(this.id)">
-            <option value="" disabled selected>何人目のお子様ですか？</option>
-            <script>
-                for (let i = 1; i <= 10; i++) document.write(`<option value="${i}人目">${i}人目</option>`);
-            </script>
-        </select>
-        <input type="text" id="fatherName" placeholder="パパのお名前（パパ参加の方のみ）" oninput="saveInput(this.id)">
-
         <div class="label" id="menuLabel">メニュー選択 <span class="required">必須</span></div>
 
 
-        <div id="class-section" class="menu-section">
-            <div class="menu-grid">
-                <button type="button" class="menu-btn category-btn" onclick="selectCategory(this, 'class')">クラス・イベント</button>
-            </div>
-            <p style="font-size:12px; color:#666;">※開催日が決まっているメニューです。</p>
-        </div>
+        <p style="font-size:12px; color:#666;">※開催日が決まっているメニューです。</p>
 
-        <div id="classMenuSection" class="section-hidden">
+        <div id="classMenuSection">
             <div class="class-menu-grid">
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'babyMama1st')">べびぃとママのクラス 1st（13時～14時30分）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'babyMama2nd')">べびぃとママのクラス 2nd（15時～16時）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'babyFood')">離乳食クラス（10時～11時30分）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'smilePapa')">パパと赤ちゃんが笑顔になる講座（9時30分～11時）</button>
-                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'prePapa')">プレパパ、パパ交流会（9時30分～11時）</button>
+                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'prePapa')">プレパパ・パパ交流会（9時30分～11時）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'grandParent')">おまご育て講座（13時30分～14時30分）</button>
+                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'flowerArrangement')">フラワーアレンジメントの会（13時30分～15時）</button>
+                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'pregnancyTalk')">ママもパパも知っておきたい妊娠・出産・産後のお話会（10時～11時30分）</button>
+                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'professionalCare')">切れ目ない支援を実現させるための助産ケア（13時～15時）</button>
             </div>
         </div>
 
@@ -390,6 +391,7 @@
                 </div>
             </div>
             <div id="classTimeInfo" class="selection-note section-hidden"></div>
+            <div id="classEventInfo" class="event-info-box section-hidden"></div>
         </div>
 
         <div id="calendarSection" class="section-hidden">
@@ -413,6 +415,29 @@
         </div>
 
         <br>
+        <div class="label">お客様情報 <span class="required">必須</span></div>
+        <input type="text" id="name" placeholder="お名前" oninput="saveInput(this.id)">
+        <input type="tel" id="phone" placeholder="電話番号" oninput="saveInput(this.id)">
+        <div id="occupationSection" class="section-hidden">
+            <input type="text" id="occupation" placeholder="参加者の所属（専門職向け講座の方のみ）" oninput="saveInput(this.id)">
+        </div>
+
+        <div class="label">詳細情報 <span class="required">必須</span></div>
+        <input type="text" id="dueDate" placeholder="出産予定日（妊婦の方のみ）" onfocus="(this.type='date')"
+            onblur="(this.type='text')" onchange="saveInput(this.id)">
+        <input type="text" id="childName" placeholder="お子様の名前" oninput="saveInput(this.id)">
+        <input type="text" id="childDob" placeholder="お子様の生年月日" onfocus="(this.type='date')" onblur="(this.type='text')"
+            onchange="saveInput(this.id)">
+        <input type="text" id="address" placeholder="お住まいの市町" oninput="saveInput(this.id)">
+
+        <select id="childCount" onchange="saveInput(this.id)">
+            <option value="" disabled selected>何人目のお子様ですか？</option>
+            <script>
+                for (let i = 1; i <= 10; i++) document.write(`<option value="${i}人目">${i}人目</option>`);
+            </script>
+        </select>
+        <input type="text" id="fatherName" placeholder="パパのお名前（パパ参加の方のみ）" oninput="saveInput(this.id)">
+
         <div class="label">備考</div>
         <textarea id="message" rows="3" placeholder="ご質問等あればご記入ください"></textarea>
 
@@ -420,7 +445,7 @@
             <input type="checkbox" id="classDetailAgreement">
             <span class="agreement-content">
                 <span class="agreement-title">ご確認ください</span>
-                <span class="agreement-text">詳細はリッチメニューの「ケアクラス詳細」をご覧ください。<span class="agreement-required">（必須）</span></span>
+                <span class="agreement-text">詳細はリッチメニューの「ケア・クラス詳細」をご覧ください。<span class="agreement-required">（必須）</span></span>
             </span>
         </label>
 
@@ -432,7 +457,7 @@
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script>
         // 設定
-        const GAS_URL = 'https://script.google.com/macros/s/AKfycbzW4pZgcbNtJwgJwHotop62wJrovE5rtXYKvOUOX4-PIXw1IhjADnaxNZwREZjRlGZexg/exec';
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbySCGWJWcfEEtjxda62jJVOHmdtqCcJxTej4dey3Dy62QTCztSL3dkLxFEphJo0egeI/exec';
 
         const JP_WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
         const CLASS_SCHEDULES = {
@@ -441,21 +466,21 @@
                 duration: 90,
                 startTime: '13:00',
                 endTime: '14:30',
-                dates: ['2026-04-13', '2026-05-11', '2026-06-08', '2026-07-06', '2026-08-03', '2026-09-07', '2026-10-05', '2027-01-18', '2027-02-08', '2027-03-08']
+                dates: ['2026-05-11', '2026-06-08', '2026-07-06', '2026-08-03', '2026-09-07', '2026-10-05', '2027-01-18', '2027-02-08', '2027-03-08']
             },
             babyMama2nd: {
                 name: 'べびぃとママのクラス 2nd（15時～16時）',
                 duration: 60,
                 startTime: '15:00',
                 endTime: '16:00',
-                dates: ['2026-04-13', '2026-05-11', '2026-06-08', '2026-07-06', '2026-08-03', '2026-09-07', '2026-10-05', '2027-01-18', '2027-02-08', '2027-03-08']
+                dates: ['2026-05-11', '2026-06-08', '2026-07-06', '2026-08-03', '2026-09-07', '2026-10-05', '2027-01-18', '2027-02-08', '2027-03-08']
             },
             babyFood: {
                 name: '離乳食クラス（10時～11時30分）',
                 duration: 90,
                 startTime: '10:00',
                 endTime: '11:30',
-                dates: ['2026-04-13', '2026-06-08', '2026-08-03', '2026-10-05', '2027-01-18', '2027-02-08']
+                dates: ['2026-06-08', '2026-08-03', '2026-10-05', '2027-01-18', '2027-02-08']
             },
             smilePapa: {
                 name: 'パパと赤ちゃんが笑顔になる講座（9時30分～11時）',
@@ -465,11 +490,11 @@
                 dates: ['2026-06-13', '2026-08-08', '2026-10-10', '2027-02-13']
             },
             prePapa: {
-                name: 'プレパパ、パパ交流会（9時30分～11時）',
+                name: 'プレパパ・パパ交流会（9時30分～11時）',
                 duration: 90,
                 startTime: '09:30',
                 endTime: '11:00',
-                dates: ['2026-04-11', '2026-07-11', '2026-09-12', '2027-01-09']
+                dates: ['2026-07-11', '2026-09-12', '2027-01-09']
             },
             grandParent: {
                 name: 'おまご育て講座（13時30分～14時30分）',
@@ -477,10 +502,37 @@
                 startTime: '13:30',
                 endTime: '14:30',
                 dates: ['2026-06-25', '2026-08-27', '2026-10-22', '2027-03-25']
+            },
+            flowerArrangement: {
+                name: 'フラワーアレンジメントの会（13時30分～15時）',
+                duration: 90,
+                startTime: '13:30',
+                endTime: '15:00',
+                dates: ['2026-05-08'],
+                info: '<strong>説明を必ずご覧ください</strong>講師の先生をお呼びしてカーネーションのフラワーアレンジメントをします。ご自分への癒しや母の日のプレゼント、玄関飾りにもおすすめです。<ul><li>対象：子育て中の方ならどなたでも、お子さん連れも可能</li><li>参加費：2,000円（材料費・お茶菓子代を含む）</li><li>持ち物：水分、動きやすい格好</li></ul>'
+            },
+            pregnancyTalk: {
+                name: 'ママもパパも知っておきたい妊娠・出産・産後のお話会（10時～11時30分）',
+                duration: 90,
+                startTime: '10:00',
+                endTime: '11:30',
+                dates: ['2026-05-30'],
+                info: '<strong>説明を必ずご覧ください</strong>和歌山県田辺市のちひろ助産院院長、大平昌子先生をお招きして、妊娠から産後、子育て、夫婦関係などのお話をしていただきます。<ul><li>対象：子育て中の方ならどなたでも、お子さん連れも可能</li><li>参加費：1,000円（材料費・お茶菓子代を含む）</li><li>持ち物：水分、お子さんのお出かけセットなど</li></ul>'
+            },
+            professionalCare: {
+                name: '切れ目ない支援を実現させるための助産ケア（13時～15時）',
+                duration: 120,
+                startTime: '13:00',
+                endTime: '15:00',
+                dates: ['2026-05-30'],
+                requiresOccupation: true,
+                info: '<strong>説明を必ずご覧ください</strong>和歌山県田辺市のちひろ助産院院長、大平昌子先生をお招きして、切れ目ない支援を実現させるための助産ケアをお話いただきます。<ul><li>対象：助産師・保健師・看護師・保育士などの子育て支援関係者</li><li>参加費：3,000円</li><li>持ち物：水分、筆記用具、動きやすい格好</li></ul>'
             }
         };
 
-        let currentCategory = '';
+        const COMMON_EVENT_INFO = '<ul><li>場所：翠助産院</li><li>駐車場：敷地内と建物側面に駐車できます。外階段から2階へお越しください。</li><li>お支払い：現金または有田市商品券が使えます。</li><li>キャンセルの場合はできるだけ早くお知らせください。</li></ul>';
+
+        let currentCategory = 'class';
         let selectedClassKey = '';
         let selectedMenuName = '';
         let selectedDuration = 0;
@@ -498,12 +550,12 @@
 
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
-            liff.init({ liffId: '2008994098-6Hq9JzUh' })
+            liff.init({ liffId: '2005254357-zKma9BZk' })
                 .then(() => console.log('LIFF OK'))
                 .catch(err => console.error(err));
 
             // ▼▼▼ 保存データの復元処理 ▼▼▼
-            const idsToRestore = ['name', 'phone', 'dueDate', 'childName', 'childDob', 'address', 'childCount', 'fatherName'];
+            const idsToRestore = ['name', 'phone', 'occupation', 'dueDate', 'childName', 'childDob', 'address', 'childCount', 'fatherName'];
             idsToRestore.forEach(id => {
                 const savedValue = localStorage.getItem(id);
                 if (savedValue) {
@@ -517,6 +569,8 @@
 
             renderCalendarHeader();
             initializeClassDateSelect();
+            document.getElementById('calendarSection').classList.add('section-hidden');
+            document.getElementById('classDateSection').classList.add('section-hidden');
         });
 
         function selectCategory(btn, category) {
@@ -536,6 +590,8 @@
                 selectedMenuName = '';
                 selectedDuration = 0;
                 setClassTimeInfo('');
+                setClassEventInfo('');
+                toggleOccupationField(false);
                 return;
             }
 
@@ -543,6 +599,8 @@
             selectedMenuName = 'イベント';
             selectedDuration = 120;
             setClassTimeInfo('');
+            setClassEventInfo('');
+            toggleOccupationField(false);
             fetchAvailability();
         }
 
@@ -558,6 +616,8 @@
 
             populateClassDateOptions(schedule.dates);
             setClassTimeInfo(`開催時間：${schedule.startTime}～${schedule.endTime}`);
+            setClassEventInfo(schedule.info ? schedule.info + COMMON_EVENT_INFO : '');
+            toggleOccupationField(Boolean(schedule.requiresOccupation));
             document.getElementById('classDateSection').classList.remove('section-hidden');
         }
 
@@ -716,6 +776,8 @@
             document.getElementById('classDateValue').value = '';
             document.getElementById('classDatePlaceholder').style.display = '';
             selectedDate = '';
+            setClassEventInfo('');
+            toggleOccupationField(false);
         }
 
         function populateClassDateOptions(dates) {
@@ -757,6 +819,18 @@
             infoEl.classList.toggle('section-hidden', !text);
         }
 
+        function setClassEventInfo(html) {
+            const infoEl = document.getElementById('classEventInfo');
+            infoEl.innerHTML = html;
+            infoEl.classList.toggle('section-hidden', !html);
+        }
+
+        function toggleOccupationField(show) {
+            const section = document.getElementById('occupationSection');
+            section.classList.toggle('section-hidden', !show);
+            if (!show) document.getElementById('occupation').value = '';
+        }
+
         function formatSelectedDate(dateStr) {
             if (!dateStr) return '';
             const [datePart, timePart] = dateStr.split(' ');
@@ -772,11 +846,13 @@
             if (!currentCategory) return alert('カテゴリを選択してください');
             if (!selectedMenuName) return alert(currentCategory === 'class' ? 'クラスメニューを選択してください' : 'メニューを選択してください');
             if (!selectedDate) return alert('日時を選択してください');
-            if (!document.getElementById('classDetailAgreement').checked) return alert('「ケアクラス詳細」の確認チェックを入れてください');
+            if (CLASS_SCHEDULES[selectedClassKey] && CLASS_SCHEDULES[selectedClassKey].requiresOccupation && !document.getElementById('occupation').value) return alert('参加者の所属を入力してください');
+            if (!document.getElementById('classDetailAgreement').checked) return alert('「ケア・クラス詳細」の確認チェックを入れてください');
 
             const msg = `【予約フォーム】
 お名前：${document.getElementById('name').value}
 電話番号：${document.getElementById('phone').value}
+参加者の所属：${document.getElementById('occupation').value}
 出産予定日：${document.getElementById('dueDate').value}
 お子様の名前：${document.getElementById('childName').value}
 お子様の生年月日：${document.getElementById('childDob').value}

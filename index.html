@@ -459,6 +459,9 @@
         // 設定
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbySCGWJWcfEEtjxda62jJVOHmdtqCcJxTej4dey3Dy62QTCztSL3dkLxFEphJo0egeI/exec';
 
+        // クラスの定員（10件以上で満員）
+        const CLASS_RESERVATION_LIMIT = 10;
+
         const JP_WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
         const CLASS_SCHEDULES = {
             babyMama1st: {
@@ -550,7 +553,7 @@
 
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
-            liff.init({ liffId: '2008994098-6Hq9JzUh' })
+            liff.init({ liffId: '2005254357-zKma9BZk' })
                 .then(() => console.log('LIFF OK'))
                 .catch(err => console.error(err));
 
@@ -790,11 +793,77 @@
                 const option = document.createElement('option');
                 option.value = dateStr;
                 option.textContent = label;
+                option.setAttribute('data-iso', dateStr);
+                option.setAttribute('data-label', label);
                 selectEl.appendChild(option);
             });
 
             document.getElementById('classDateValue').value = '';
             document.getElementById('classDatePlaceholder').style.display = '';
+
+            // Googleカレンダーから満員日を判定して該当日を選択不可にする
+            checkClassDateCapacity(dates, selectedMenuName);
+        }
+
+        async function checkClassDateCapacity(dates, menuName) {
+            const selectEl = document.getElementById('classDateSelect');
+            if (!menuName || !dates || dates.length === 0) return;
+
+            const sortedDates = [...dates].sort();
+            selectEl.disabled = true;
+            selectEl.style.opacity = '0.5';
+
+            try {
+                const startTime = new Date(sortedDates[0] + 'T00:00:00+09:00').toISOString();
+                const endTime = new Date(sortedDates[sortedDates.length - 1] + 'T23:59:59+09:00').toISOString();
+
+                const url = `${GAS_URL}?category=eventList`
+                    + `&startTime=${encodeURIComponent(startTime)}`
+                    + `&endTime=${encodeURIComponent(endTime)}`;
+
+                const res = await fetch(url);
+                const events = await res.json();
+
+                if (!Array.isArray(events)) {
+                    console.error('イベント取得エラー:', events);
+                    return;
+                }
+
+                // 別メニューを選び直していたら処理をスキップ
+                if (menuName !== selectedMenuName) return;
+
+                for (let i = 1; i < selectEl.options.length; i++) {
+                    const option = selectEl.options[i];
+                    const isoDate = option.getAttribute('data-iso');
+                    const originalLabel = option.getAttribute('data-label');
+                    if (!isoDate) continue;
+
+                    const dayStart = new Date(isoDate + 'T00:00:00+09:00');
+                    const dayEnd = new Date(isoDate + 'T23:59:59+09:00');
+
+                    const count = events.filter(function (ev) {
+                        if (!ev) return false;
+                        // 同じメニュー名を含むイベントのみ対象（≪メニュー≫ 行で識別）
+                        const desc = ev.description || '';
+                        if (desc.indexOf(menuName) === -1) return false;
+                        const evStart = new Date(ev.startTime);
+                        return evStart >= dayStart && evStart <= dayEnd;
+                    }).length;
+
+                    console.log(isoDate + ' の「' + menuName + '」予約数: ' + count + '/' + CLASS_RESERVATION_LIMIT);
+
+                    if (count >= CLASS_RESERVATION_LIMIT) {
+                        option.textContent = originalLabel + ' - 満員になりました';
+                        option.disabled = true;
+                        option.value = ''; // 選択できないように値をクリア
+                    }
+                }
+            } catch (error) {
+                console.error('定員チェックエラー:', error);
+            } finally {
+                selectEl.disabled = false;
+                selectEl.style.opacity = '1';
+            }
         }
 
         function updateClassDateSelection() {

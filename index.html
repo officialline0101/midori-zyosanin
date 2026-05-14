@@ -553,7 +553,7 @@
 
         // 初期化
         document.addEventListener('DOMContentLoaded', () => {
-            liff.init({ liffId: '2005254357-zKma9BZk' })
+            liff.init({ liffId: '2008994098-6Hq9JzUh' })
                 .then(() => console.log('LIFF OK'))
                 .catch(err => console.error(err));
 
@@ -787,6 +787,9 @@
             const selectEl = document.getElementById('classDateSelect');
             selectEl.innerHTML = '<option value="" selected>日付を選択</option>';
 
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
             dates.forEach(dateStr => {
                 const date = new Date(`${dateStr}T00:00:00`);
                 const label = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}（${JP_WEEKDAYS[date.getDay()]}）`;
@@ -795,14 +798,23 @@
                 option.textContent = label;
                 option.setAttribute('data-iso', dateStr);
                 option.setAttribute('data-label', label);
+
+                // 当日を過ぎた日付は選択不可
+                if (date < today) {
+                    option.textContent = label + ' - 日にちが過ぎました';
+                    option.disabled = true;
+                    option.value = '';
+                }
+
                 selectEl.appendChild(option);
             });
 
             document.getElementById('classDateValue').value = '';
             document.getElementById('classDatePlaceholder').style.display = '';
 
-            // Googleカレンダーから満員日を判定して該当日を選択不可にする
-            checkClassDateCapacity(dates, selectedMenuName);
+            // 未来日のみGoogleカレンダーで満員判定
+            const futureDates = dates.filter(d => new Date(`${d}T00:00:00`) >= today);
+            checkClassDateCapacity(futureDates, selectedMenuName);
         }
 
         async function checkClassDateCapacity(dates, menuName) {
@@ -837,6 +849,7 @@
                     const isoDate = option.getAttribute('data-iso');
                     const originalLabel = option.getAttribute('data-label');
                     if (!isoDate) continue;
+                    if (option.disabled) continue; // 過去日などは既に無効化済み
 
                     const dayStart = new Date(isoDate + 'T00:00:00+09:00');
                     const dayEnd = new Date(isoDate + 'T23:59:59+09:00');

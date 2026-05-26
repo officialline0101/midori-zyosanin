@@ -520,6 +520,7 @@
                 startTime: '10:00',
                 endTime: '11:30',
                 dates: ['2026-05-30'],
+                limit: 20,
                 info: '<strong>説明を必ずご覧ください</strong>和歌山県田辺市のちひろ助産院院長、大平昌子先生をお招きして、妊娠から産後、子育て、夫婦関係などのお話をしていただきます。<ul><li>対象：子育て中の方ならどなたでも、お子さん連れも可能</li><li>参加費：1,000円（材料費・お茶菓子代を含む）</li><li>持ち物：水分、お子さんのお出かけセットなど</li></ul>'
             },
             professionalCare: {
@@ -529,6 +530,7 @@
                 endTime: '15:00',
                 dates: ['2026-05-30'],
                 requiresOccupation: true,
+                limit: 30,
                 info: '<strong>説明を必ずご覧ください</strong>和歌山県田辺市のちひろ助産院院長、大平昌子先生をお招きして、切れ目ない支援を実現させるための助産ケアをお話いただきます。<ul><li>対象：助産師・保健師・看護師・保育士などの子育て支援関係者</li><li>参加費：3,000円</li><li>持ち物：水分、筆記用具、動きやすい格好</li></ul>'
             }
         };
@@ -863,9 +865,10 @@
                         return evStart >= dayStart && evStart <= dayEnd;
                     }).length;
 
-                    console.log(isoDate + ' の「' + menuName + '」予約数: ' + count + '/' + CLASS_RESERVATION_LIMIT);
+                    const menuLimit = (CLASS_SCHEDULES[selectedClassKey] && CLASS_SCHEDULES[selectedClassKey].limit) || CLASS_RESERVATION_LIMIT;
+                    console.log(isoDate + ' の「' + menuName + '」予約数: ' + count + '/' + menuLimit);
 
-                    if (count >= CLASS_RESERVATION_LIMIT) {
+                    if (count >= menuLimit) {
                         option.textContent = originalLabel + ' - 満員になりました';
                         option.disabled = true;
                         option.value = ''; // 選択できないように値をクリア

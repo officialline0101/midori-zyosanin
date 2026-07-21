@@ -374,6 +374,7 @@
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'grandParent')">おまご育て講座（13時30分～14時30分）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'gumMassage')">歯ぐきマッサージ講習会（13時～16時）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'misoWorkshop')">金山寺みそ作りワークショップ（10時～12時）</button>
+                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'brainNutrition')">脳育てと栄養（オンライン）</button>
             </div>
         </div>
 
@@ -521,6 +522,19 @@
                 limit: 20,
                 dates: ['2026-07-30']
             },
+            brainNutrition: {
+                name: '脳育てと栄養（オンライン）',
+                duration: 30,
+                startTime: '19:30',
+                endTime: '20:00',
+                limit: 20,
+                dates: ['2026-08-03']
+            },
+        };
+
+        // このメニューが選ばれたときだけ、2通目のメッセージを送信する
+        const SECOND_MESSAGE_MENUS = {
+            brainNutrition: '脳育てと栄養予約'
         };
 
         const COMMON_EVENT_INFO = '<ul><li>場所：翠助産院</li><li>駐車場：敷地内と建物側面に駐車できます。外階段から2階へお越しください。</li><li>お支払い：現金または有田市商品券が使えます。</li><li>キャンセルの場合はできるだけ早くお知らせください。</li></ul>';
@@ -938,8 +952,14 @@
  ${formatSelectedDate(selectedDate)}
 メッセージ：${document.getElementById('message').value}`;
 
+            const messages = [{ type: 'text', text: msg }];
+            const secondMessage = SECOND_MESSAGE_MENUS[selectedClassKey];
+            if (secondMessage) {
+                messages.push({ type: 'text', text: secondMessage });
+            }
+
             if (liff.isInClient()) {
-                liff.sendMessages([{ type: 'text', text: msg }])
+                liff.sendMessages(messages)
                     .then(() => {
                         alert('予約リクエストを送信しました！');
                         liff.closeWindow();

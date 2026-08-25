@@ -32,7 +32,7 @@
         }
 
         h1 {
-            background: linear-gradient(135deg, #13ca5e, #0e9e49);
+            background: linear-gradient(135deg, #8cc8c0, #6fb0a7);
             color: white;
             padding: 20px;
             margin: -25px -25px 20px -25px;
@@ -42,7 +42,7 @@
         }
 
         .label {
-            background-color: #13ca5e;
+            background-color: #8cc8c0;
             color: #ffffff;
             padding: 5px;
             font-size: 16px;
@@ -96,9 +96,9 @@
         }
 
         .category-tab.active {
-            background: #13ca5e;
+            background: #8cc8c0;
             color: white;
-            border-color: #13ca5e;
+            border-color: #8cc8c0;
         }
 
         /* メニューボタン */
@@ -112,8 +112,8 @@
         .menu-btn {
             padding: 12px;
             background: #fff;
-            border: 1px solid #13ca5e;
-            color: #13ca5e;
+            border: 1px solid #8cc8c0;
+            color: #8cc8c0;
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
@@ -125,9 +125,9 @@
         }
 
         .menu-btn.active {
-            background: #13ca5e;
+            background: #8cc8c0;
             color: white;
-            box-shadow: 0 0 0 2px #0e9e49;
+            box-shadow: 0 0 0 2px #6fb0a7;
         }
 
         .class-menu-grid {
@@ -178,8 +178,8 @@
 
         .datetime-input:focus {
             outline: none;
-            border-color: #13ca5e;
-            box-shadow: 0 0 0 3px rgba(19, 202, 94, 0.15);
+            border-color: #8cc8c0;
+            box-shadow: 0 0 0 3px rgba(140, 200, 192, 0.15);
         }
 
         .selection-note {
@@ -240,7 +240,7 @@
         }
 
         .calendar td.available {
-            color: #13ca5e;
+            color: #8cc8c0;
             font-weight: bold;
         }
 
@@ -251,14 +251,14 @@
         }
 
         .calendar td.selected {
-            background-color: #13ca5e;
+            background-color: #8cc8c0;
             color: white;
         }
 
         .submit-button {
             width: 100%;
             padding: 15px;
-            background-color: #13ca5e;
+            background-color: #8cc8c0;
             color: white;
             border: none;
             border-radius: 5px;
@@ -268,7 +268,7 @@
         }
 
         .submit-button:hover {
-            background-color: #0e9e49;
+            background-color: #6fb0a7;
         }
 
         /* ローディング */
@@ -298,15 +298,15 @@
             border: 1px solid #cfe8d9;
             border-radius: 12px;
             background: linear-gradient(135deg, #f8fffb, #eefaf3);
-            box-shadow: 0 6px 14px rgba(19, 202, 94, 0.08);
+            box-shadow: 0 6px 14px rgba(140, 200, 192, 0.08);
             color: #24543a;
             cursor: pointer;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
         }
 
         .agreement-box:hover {
-            border-color: #13ca5e;
-            box-shadow: 0 8px 18px rgba(19, 202, 94, 0.14);
+            border-color: #8cc8c0;
+            box-shadow: 0 8px 18px rgba(140, 200, 192, 0.14);
             transform: translateY(-1px);
         }
 
@@ -314,7 +314,7 @@
             width: auto;
             margin: 4px 0 0;
             transform: scale(1.2);
-            accent-color: #13ca5e;
+            accent-color: #8cc8c0;
         }
 
         .agreement-content {
@@ -326,7 +326,7 @@
             margin-bottom: 6px;
             padding: 3px 9px;
             border-radius: 999px;
-            background: #13ca5e;
+            background: #8cc8c0;
             color: #fff;
             font-size: 12px;
             font-weight: bold;
@@ -372,9 +372,6 @@
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'smilePapa')">パパと赤ちゃんが笑顔になる講座（9時30分～11時）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'prePapa')">プレパパ・パパ交流会（9時30分～11時）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'grandParent')">おまご育て講座（13時30分～14時30分）</button>
-                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'gumMassage')">歯ぐきマッサージ講習会（13時～16時）</button>
-                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'misoWorkshop')">金山寺みそ作りワークショップ（10時～12時）</button>
-                <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'brainNutrition')">脳育てと栄養（オンライン）</button>
                 <button type="button" class="menu-btn class-option-btn" onclick="selectClassMenu(this, 'eyeTalk')">目のお話会（13時30分～14時30分）</button>
             </div>
         </div>
@@ -507,30 +504,6 @@
                 endTime: '14:30',
                 dates: ['2026-06-25', '2026-08-27', '2026-10-22', '2027-03-25']
             },
-            gumMassage: {
-                name: '歯ぐきマッサージ講習会（13時～16時）',
-                duration: 180,
-                startTime: '13:00',
-                endTime: '16:00',
-                limit: 14,
-                dates: ['2026-07-14']
-            },
-            misoWorkshop: {
-                name: '金山寺みそ作りワークショップ（10時～12時）',
-                duration: 120,
-                startTime: '10:00',
-                endTime: '12:00',
-                limit: 20,
-                dates: ['2026-07-30']
-            },
-            brainNutrition: {
-                name: '脳育てと栄養（オンライン）',
-                duration: 30,
-                startTime: '19:30',
-                endTime: '20:00',
-                limit: 20,
-                dates: ['2026-08-03']
-            },
             eyeTalk: {
                 name: '目のお話会（13時30分～14時30分）',
                 duration: 60,
@@ -541,9 +514,7 @@
         };
 
         // このメニューが選ばれたときだけ、2通目のメッセージを送信する
-        const SECOND_MESSAGE_MENUS = {
-            brainNutrition: '脳育てと栄養予約'
-        };
+        const SECOND_MESSAGE_MENUS = {};
 
         const COMMON_EVENT_INFO = '<ul><li>場所：翠助産院</li><li>駐車場：敷地内と建物側面に駐車できます。外階段から2階へお越しください。</li><li>お支払い：現金または有田市商品券が使えます。</li><li>キャンセルの場合はできるだけ早くお知らせください。</li></ul>';
 
